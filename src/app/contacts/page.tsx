@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Input from '@/components/Input';
 import Button from '@/components/Button';
 import { formatPhone } from '@/utils/formatPhone';
 
@@ -19,6 +18,7 @@ export default function ContactsPage() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
 
+  // Fetch initial contacts from API
   useEffect(() => {
     fetch('/api/contacts')
       .then((res) => res.json())
@@ -29,7 +29,7 @@ export default function ContactsPage() {
     setEditingContact(contact);
     setName(contact.name);
     setEmail(contact.email);
-    setPhone(contact.phone);
+    setPhone(formatPhone(contact.phone)); 
   };
 
   const saveContact = async () => {
@@ -46,7 +46,7 @@ export default function ContactsPage() {
           phone,
         }),
       });
-      
+
       setContacts((prevContacts) =>
         prevContacts.map((contact) =>
           contact.id === editingContact.id
@@ -54,7 +54,7 @@ export default function ContactsPage() {
             : contact
         )
       );
-      
+
       setEditingContact(null);
       setName('');
       setEmail('');
@@ -75,28 +75,55 @@ export default function ContactsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold text-white mb-4">Lista de Contatos</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center md:text-left">Lista de Contatos</h1>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2">
+        {contacts.map((contact) => (
+          <div
+            key={contact.id}
+            className="bg-gray-800 p-4 rounded-lg shadow-md text-white"
+          >
+            <div className="mb-2">
+              <strong>Nome:</strong> {contact.name}
+            </div>
+            <div className="mb-2">
+              <strong>Email:</strong> {contact.email}
+            </div>
+            <div className="mb-2">
+              <strong>Telefone:</strong>{formatPhone(contact.phone)}
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button onClick={() => startEditing(contact)}>Editar</Button>
+              <Button onClick={() => deleteContact(contact.id)}>Excluir</Button>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {editingContact && (
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-white mb-2">Editar</h2>
-          <div className="grid grid-cols-1 gap-4 max-w-md">
-            <Input
+        <div className="mt-6 p-4 bg-gray-700 rounded-lg">
+          <h2 className="text-xl font-semibold text-white mb-4">Editar</h2>
+          <div className="space-y-4">
+            <input
               type="text"
-              value={name}
+              className="w-full p-2 rounded bg-gray-800 text-white"
               placeholder="Name"
+              value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <Input
+            <input
               type="email"
-              value={email}
+              className="w-full p-2 rounded bg-gray-800 text-white"
               placeholder="Email"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Input
+            <input
               type="tel"
-              value={phone}
+              className="w-full p-2 rounded bg-gray-800 text-white"
               placeholder="Phone"
+              value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              
             />
             <div className="flex space-x-2">
               <Button onClick={saveContact}>Salvar</Button>
@@ -105,31 +132,6 @@ export default function ContactsPage() {
           </div>
         </div>
       )}
-      <table className="min-w-full bg-gray-800 border border-gray-600 text-white">
-        <thead>
-          <tr>
-            <th className="py-2 px-4 border-b border-gray-600 text-left">Name</th>
-            <th className="py-2 px-4 border-b border-gray-600 text-left">Email</th>
-            <th className="py-2 px-4 border-b border-gray-600 text-left">Phone</th>
-            <th className="py-2 px-4 border-b border-gray-600 text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {contacts.map((contact) => (
-            <tr key={contact.id} className="hover:bg-gray-700">
-              <td className="py-2 px-4 border-b border-gray-600">{contact.name}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{contact.email}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{formatPhone(contact.phone)}</td>
-              <td className="py-2 px-4 border-b border-gray-600 text-center">
-                <div className="flex justify-center space-x-2">
-                  <Button onClick={() => startEditing(contact)}>Edit</Button>
-                  <Button onClick={() => deleteContact(contact.id)}>Delete</Button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }
