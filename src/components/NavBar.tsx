@@ -19,7 +19,7 @@ const Navbar = () => {
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
-            className="text-white focus:outline-none ml-4" // Adiciona espaço entre o texto e o ícone
+            className="text-white focus:outline-none ml-4"
           >
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>

@@ -18,7 +18,6 @@ export default function ContactsPage() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
 
-  // Fetch initial contacts from API
   useEffect(() => {
     fetch('/api/contacts')
       .then((res) => res.json())
