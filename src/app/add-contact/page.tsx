@@ -10,6 +10,11 @@ export default function AddContact() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedPhone = formatPhone(e.target.value);
+    setPhone(formattedPhone);
+  };
+
   const addContact = async () => {
     await fetch('/api/contacts', {
       method: 'POST',
@@ -46,7 +51,7 @@ export default function AddContact() {
             type="tel"
             value={phone}
             placeholder="Telefone"
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={handlePhoneChange}
           />
           <div className="flex justify-center">
             <Button onClick={addContact}>Adicionar</Button>
