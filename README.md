@@ -96,7 +96,6 @@ Inicie o servidor de desenvolvimento:
 ```
 npm run dev
 # ou
-
 yarn dev
 ```
 
