@@ -132,9 +132,8 @@ Estamos ansiosos para ver suas contribuições!
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
 👤 Contato
-Desenvolvedor Principal: Márcia Agostinho
 
-💌 Email: seu.email@dominio.com | LinkedIn
+**Desenvolvedor Principal:** [Márcia Agostinho](https://www.linkedin.com/in/marcia-agostinho-developer/)
 
 Mantenha seus contatos organizados e acessíveis com o PeoplePulse!
 
