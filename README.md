@@ -128,8 +128,10 @@ git push origin feature/nova-funcionalidade
 Abra um Pull Request
 Estamos ansiosos para ver suas contribuições!
 
-📄 Licença
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+## 📄 Licença
+
+Este projeto está sob a licença [MIT](./LICENSE).
+Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
 
 👤 Contato
 
