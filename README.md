@@ -115,7 +115,8 @@ git checkout -b feature/nova-funcionalidade
 Faça commit das suas alterações:
 
 ```
-git checkout -b feature/nova-funcionalidade
+git commit -m 'Adiciona nova funcionalidade'
+
 ```
 
 Envie sua branch:
