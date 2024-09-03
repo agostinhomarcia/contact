@@ -75,10 +75,10 @@ export default function ContactsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold text-white mb-4">Contacts List</h1>
+      <h1 className="text-2xl font-bold text-white mb-4">Lista de Contatos</h1>
       {editingContact && (
         <div className="mb-6">
-          <h2 className="text-xl font-semibold text-white mb-2">Edit Contact</h2>
+          <h2 className="text-xl font-semibold text-white mb-2">Editar</h2>
           <div className="grid grid-cols-1 gap-4 max-w-md">
             <Input
               type="text"
@@ -99,8 +99,8 @@ export default function ContactsPage() {
               onChange={(e) => setPhone(e.target.value)}
             />
             <div className="flex space-x-2">
-              <Button onClick={saveContact}>Save Contact</Button>
-              <Button onClick={() => setEditingContact(null)}>Cancel</Button>
+              <Button onClick={saveContact}>Salvar</Button>
+              <Button onClick={() => setEditingContact(null)}>Cancelar</Button>
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function ContactsPage() {
             <tr key={contact.id} className="hover:bg-gray-700">
               <td className="py-2 px-4 border-b border-gray-600">{contact.name}</td>
               <td className="py-2 px-4 border-b border-gray-600">{contact.email}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{formatPhone(contact.phone)}</td> {/* Formata o telefone */}
+              <td className="py-2 px-4 border-b border-gray-600">{formatPhone(contact.phone)}</td>
               <td className="py-2 px-4 border-b border-gray-600 text-center">
                 <div className="flex justify-center space-x-2">
                   <Button onClick={() => startEditing(contact)}>Edit</Button>
