@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "PeoplePulse",
   description: "A simple contact management system built with Next.js",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -18,10 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+    <body className="flex flex-col min-h-screen">
         <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <main className="flex-grow">
+          {children}
+        </main>
+        <Footer /> {/* Footer é renderizado aqui */}
       </body>
     </html>
   );
