@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaBars, FaTimes } from "react-icons/fa";
-import { auth, provider, signInWithPopup, signOut } from "@/utils/firebase"; // Import correto
+import { FaBars, FaTimes, FaGoogle } from "react-icons/fa"; 
+import { auth, provider, signInWithPopup, signOut } from "@/utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 const Navbar = () => {
@@ -12,13 +12,13 @@ const Navbar = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user); // Armazena o usuário logado
+        setUser(user);
       } else {
-        setUser(null); // Usuário deslogado
+        setUser(null);
       }
     });
 
-    return () => unsubscribe(); // Desinscrever a escuta quando o componente desmontar
+    return () => unsubscribe();
   }, []);
 
   const toggleMenu = () => {
@@ -27,9 +27,8 @@ const Navbar = () => {
 
   const handleLogin = async () => {
     try {
-      await signInWithPopup(auth, provider); // Fazer login com Google
+      await signInWithPopup(auth, provider);
     } catch (error) {
-      console.log(error);
       console.error("Erro ao fazer login:", error);
     }
   };
@@ -63,7 +62,7 @@ const Navbar = () => {
         >
           <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
             <Link href="/contacts" className="block text-white hover:text-gray-300">
-              Lista de Contatos
+              Meus Contatos
             </Link>
             <Link href="/add-contact" className="block text-white hover:text-gray-300">
               Adicionar Contato
@@ -82,9 +81,10 @@ const Navbar = () => {
             ) : (
               <button
                 onClick={handleLogin}
-                className="block text-white hover:text-gray-300"
+                className="flex items-center space-x-2 text-white hover:text-gray-300"
               >
-                Entrar com Google
+                <FaGoogle size={20} />
+                <span>Entrar</span>
               </button>
             )}
           </div>
