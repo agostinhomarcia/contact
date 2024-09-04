@@ -1,44 +1,46 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { auth } from "@/utils/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import Button from "@/components/Button";
 import { formatPhone } from "@/utils/formatPhone";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProtectedRoute from "@/components/ProtectedRoute";
 
 type Contact = {
   id: number;
   name: string;
   email: string;
   phone: string;
-  userId: string;
 };
 
 export default function ContactsPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]); // Lista filtrada
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [user, setUser] = useState<any>(null);
+  const [search, setSearch] = useState(""); // Estado para a pesquisa
 
+  // Fetch inicial de contatos
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-        fetch(`/api/contacts?userId=${user.uid}`)
-          .then((res) => res.json())
-          .then((data) => setContacts(data));
-      } else {
-        setUser(null);
-      }
-    });
-
-    return () => unsubscribe();
+    fetch("/api/contacts")
+      .then((res) => res.json())
+      .then((data) => {
+        setContacts(data);
+        setFilteredContacts(data); // Inicializa a lista filtrada
+      });
   }, []);
+
+  // Filtrar contatos sempre que a pesquisa mudar
+  useEffect(() => {
+    const lowerSearch = search.toLowerCase(); // Normalizar pesquisa para case-insensitive
+    setFilteredContacts(
+      contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(lowerSearch) // Filtra apenas pelo nome
+      )
+    );
+  }, [search, contacts]);
 
   const startEditing = (contact: Contact) => {
     setEditingContact(contact);
@@ -48,7 +50,7 @@ export default function ContactsPage() {
   };
 
   const saveContact = async () => {
-    if (editingContact && user) {
+    if (editingContact) {
       await fetch("/api/contacts", {
         method: "PUT",
         headers: {
@@ -59,7 +61,6 @@ export default function ContactsPage() {
           name,
           email,
           phone,
-          userId: user.uid,
         }),
       });
 
@@ -86,49 +87,58 @@ export default function ContactsPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id, userId: user.uid }),
+      body: JSON.stringify({ id }),
     });
-
     setContacts(contacts.filter((contact) => contact.id !== id));
   };
 
   return (
-    <ProtectedRoute>
     <div className="container mx-auto p-4">
       <ToastContainer />
-      {user ? (
-        <>
-          <h1 className="text-2xl font-bold mb-4 text-center md:text-left">
-            Lista de Contatos
-          </h1>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2">
-            {contacts.map((contact) => (
-              <div
-                key={contact.id}
-                className="bg-gray-800 p-4 rounded-lg shadow-md text-white"
-              >
-                <div className="mb-2">
-                  <strong>Nome:</strong> {contact.name}
-                </div>
-                <div className="mb-2">
-                  <strong>Email:</strong> {contact.email}
-                </div>
-                <div className="mb-2">
-                  <strong>Telefone:</strong>
-                  {formatPhone(contact.phone)}
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button onClick={() => startEditing(contact)}>Editar</Button>
-                  <Button onClick={() => deleteContact(contact.id)}>Excluir</Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <p>Carregando...</p>
-      )}
+      <h1 className="text-2xl font-bold mb-4 text-center md:text-left">
+        Lista de Contatos
+      </h1>
 
+      {/* Campo de Pesquisa */}
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Pesquisar contato pelo nome"
+          className="w-full p-2 rounded bg-gray-800 text-white"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)} // Atualiza o estado da pesquisa
+        />
+      </div>
+
+      {/* Lista de Contatos Filtrada */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2">
+        {filteredContacts.length > 0 ? (
+          filteredContacts.map((contact) => (
+            <div
+              key={contact.id}
+              className="bg-gray-800 p-4 rounded-lg shadow-md text-white"
+            >
+              <div className="mb-2">
+                <strong>Nome:</strong> {contact.name}
+              </div>
+              <div className="mb-2">
+                <strong>Email:</strong> {contact.email}
+              </div>
+              <div className="mb-2">
+                <strong>Telefone:</strong> {formatPhone(contact.phone)}
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button onClick={() => startEditing(contact)}>Editar</Button>
+                <Button onClick={() => deleteContact(contact.id)}>Excluir</Button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-white">Nenhum contato encontrado.</p>
+        )}
+      </div>
+
+      {/* Se estiver editando, exibir o formulário de edição */}
       {editingContact && (
         <div className="mt-6 p-4 bg-gray-700 rounded-lg">
           <h2 className="text-xl font-semibold text-white mb-4">Editar</h2>
@@ -162,6 +172,5 @@ export default function ContactsPage() {
         </div>
       )}
     </div>
-    </ProtectedRoute>
   );
 }
