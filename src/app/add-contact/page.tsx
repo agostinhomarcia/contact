@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import { formatPhone } from "@/utils/formatPhone";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 function validateEmail(email: string): boolean {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -49,6 +50,7 @@ export default function AddContact() {
   };
 
   return (
+    <ProtectedRoute>
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6">
@@ -80,5 +82,6 @@ export default function AddContact() {
       </div>
       <ToastContainer />{" "}
     </div>
+    </ProtectedRoute>
   );
 }

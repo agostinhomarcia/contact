@@ -29,13 +29,14 @@ const Navbar = () => {
     try {
       await signInWithPopup(auth, provider); // Fazer login com Google
     } catch (error) {
+      console.log(error);
       console.error("Erro ao fazer login:", error);
     }
   };
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); // Fazer logout
+      await signOut(auth);
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
     }
@@ -68,7 +69,6 @@ const Navbar = () => {
               Adicionar Contato
             </Link>
 
-            {/* Se o usuário estiver logado, mostrar o botão "Sair" */}
             {user ? (
               <>
                 <span className="text-white">Olá, {user.displayName}</span>

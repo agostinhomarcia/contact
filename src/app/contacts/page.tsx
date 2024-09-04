@@ -7,6 +7,7 @@ import Button from "@/components/Button";
 import { formatPhone } from "@/utils/formatPhone";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 type Contact = {
   id: number;
@@ -24,7 +25,6 @@ export default function ContactsPage() {
   const [phone, setPhone] = useState("");
   const [user, setUser] = useState<any>(null);
 
-  // Verifica o estado de autenticação e carrega os contatos do usuário
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -93,6 +93,7 @@ export default function ContactsPage() {
   };
 
   return (
+    <ProtectedRoute>
     <div className="container mx-auto p-4">
       <ToastContainer />
       {user ? (
@@ -161,5 +162,6 @@ export default function ContactsPage() {
         </div>
       )}
     </div>
+    </ProtectedRoute>
   );
 }
