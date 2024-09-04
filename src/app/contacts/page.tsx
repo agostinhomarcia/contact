@@ -1,8 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Button from '@/components/Button';
-import { formatPhone } from '@/utils/formatPhone';
+import { useState, useEffect } from "react";
+import Button from "@/components/Button";
+import { formatPhone } from "@/utils/formatPhone";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Contact = {
   id: number;
@@ -14,12 +16,12 @@ type Contact = {
 export default function ContactsPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   useEffect(() => {
-    fetch('/api/contacts')
+    fetch("/api/contacts")
       .then((res) => res.json())
       .then((data) => setContacts(data));
   }, []);
@@ -28,15 +30,15 @@ export default function ContactsPage() {
     setEditingContact(contact);
     setName(contact.name);
     setEmail(contact.email);
-    setPhone(formatPhone(contact.phone)); 
+    setPhone(formatPhone(contact.phone));
   };
 
   const saveContact = async () => {
     if (editingContact) {
-      await fetch('/api/contacts', {
-        method: 'PUT',
+      await fetch("/api/contacts", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           id: editingContact.id,
@@ -54,18 +56,20 @@ export default function ContactsPage() {
         )
       );
 
+      toast.success("Contato salvo com sucesso!");
+
       setEditingContact(null);
-      setName('');
-      setEmail('');
-      setPhone('');
+      setName("");
+      setEmail("");
+      setPhone("");
     }
   };
 
   const deleteContact = async (id: number) => {
-    await fetch('/api/contacts', {
-      method: 'DELETE',
+    await fetch("/api/contacts", {
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ id }),
     });
@@ -74,7 +78,10 @@ export default function ContactsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center md:text-left">Lista de Contatos</h1>
+      <ToastContainer />
+      <h1 className="text-2xl font-bold mb-4 text-center md:text-left">
+        Lista de Contatos
+      </h1>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2">
         {contacts.map((contact) => (
           <div
@@ -88,7 +95,8 @@ export default function ContactsPage() {
               <strong>Email:</strong> {contact.email}
             </div>
             <div className="mb-2">
-              <strong>Telefone:</strong>{formatPhone(contact.phone)}
+              <strong>Telefone:</strong>
+              {formatPhone(contact.phone)}
             </div>
             <div className="flex justify-end space-x-2">
               <Button onClick={() => startEditing(contact)}>Editar</Button>
@@ -97,7 +105,6 @@ export default function ContactsPage() {
           </div>
         ))}
       </div>
-
       {editingContact && (
         <div className="mt-6 p-4 bg-gray-700 rounded-lg">
           <h2 className="text-xl font-semibold text-white mb-4">Editar</h2>
@@ -105,7 +112,7 @@ export default function ContactsPage() {
             <input
               type="text"
               className="w-full p-2 rounded bg-gray-800 text-white"
-              placeholder="Name"
+              placeholder="Nome"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -119,10 +126,9 @@ export default function ContactsPage() {
             <input
               type="tel"
               className="w-full p-2 rounded bg-gray-800 text-white"
-              placeholder="Phone"
+              placeholder="Telefone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              
             />
             <div className="flex space-x-2">
               <Button onClick={saveContact}>Salvar</Button>

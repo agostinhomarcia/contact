@@ -1,14 +1,21 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Input from '@/components/Input';
-import Button from '@/components/Button';
-import { formatPhone } from '@/utils/formatPhone';
+import { useState } from "react";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import { formatPhone } from "@/utils/formatPhone";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+function validateEmail(email: string): boolean {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
 
 export default function AddContact() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formattedPhone = formatPhone(e.target.value);
@@ -16,16 +23,29 @@ export default function AddContact() {
   };
 
   const addContact = async () => {
-    await fetch('/api/contacts', {
-      method: 'POST',
+    if (!validateEmail(email)) {
+      toast.error("Por favor, insira um e-mail válido.");
+      return;
+    }
+
+    if (phone.length < 14) {
+      toast.error("Por favor, insira um telefone válido.");
+      return;
+    }
+
+    await fetch("/api/contacts", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ name, email, phone }),
     });
-    setName('');
-    setEmail('');
-    setPhone('');
+
+    toast.success("Contato adicionado com sucesso!");
+
+    setName("");
+    setEmail("");
+    setPhone("");
   };
 
   return (
@@ -58,6 +78,7 @@ export default function AddContact() {
           </div>
         </div>
       </div>
+      <ToastContainer />{" "}
     </div>
   );
 }
