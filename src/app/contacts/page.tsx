@@ -15,29 +15,28 @@ type Contact = {
 
 export default function ContactsPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]); // Lista filtrada
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [search, setSearch] = useState(""); // Estado para a pesquisa
+  const [search, setSearch] = useState("");
 
-  // Fetch inicial de contatos
+
   useEffect(() => {
     fetch("/api/contacts")
       .then((res) => res.json())
       .then((data) => {
         setContacts(data);
-        setFilteredContacts(data); // Inicializa a lista filtrada
+        setFilteredContacts(data);
       });
   }, []);
 
-  // Filtrar contatos sempre que a pesquisa mudar
   useEffect(() => {
-    const lowerSearch = search.toLowerCase(); // Normalizar pesquisa para case-insensitive
+    const lowerSearch = search.toLowerCase();
     setFilteredContacts(
       contacts.filter((contact) =>
-        contact.name.toLowerCase().includes(lowerSearch) // Filtra apenas pelo nome
+        contact.name.toLowerCase().includes(lowerSearch)
       )
     );
   }, [search, contacts]);
@@ -99,14 +98,13 @@ export default function ContactsPage() {
         Lista de Contatos
       </h1>
 
-      {/* Campo de Pesquisa */}
       <div className="mb-4">
         <input
           type="text"
           placeholder="Pesquisar contato pelo nome"
           className="w-full p-2 rounded bg-gray-800 text-white"
           value={search}
-          onChange={(e) => setSearch(e.target.value)} // Atualiza o estado da pesquisa
+          onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
