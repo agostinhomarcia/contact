@@ -35,11 +35,39 @@ Confira a versão ao vivo do PeoplePulse clicando no link abaixo:
 
 ## 🧭 Fluxo da Aplicação
 
-1. **Página Inicial:** Uma apresentação simples do PeoplePulse com navegação fácil.
-2. **Página de Adicionar Contato:** Formulário intuitivo para adicionar novos contatos.
-3. **Página de Lista de Contatos:** Exibição clara de todos os contatos cadastrados.
-4. **Página de Edição de Contato:** Editar contatos existentes de maneira rápida.
-5. **Página de Exclusão de Contato:** Remova contatos com um simples clique.
+1. **Página Inicial:** Uma apresentação simples e visualmente atrativa do PeoplePulse, com botão de login via Google. Usuários autenticados são redirecionados automaticamente para a lista de contatos.
+
+2. **Página de Adicionar Contato:** Formulário intuitivo para adicionar novos contatos, com validação de e-mail e formatação automática de telefone. Após a adição, uma notificação confirma o sucesso.
+
+3. **Página de Lista de Contatos:** Exibição clara e responsiva de todos os contatos cadastrados, com ações rápidas para editar ou excluir diretamente da lista.
+
+4. **Página de Edição de Contato:** Permite edição rápida de contatos. O formulário já vem pré-preenchido, e uma notificação confirma a atualização após salvar.
+
+5. **Página de Exclusão de Contato:** Remova contatos com um simples clique. A lista é atualizada instantaneamente e uma notificação confirma a exclusão.
+
+6. **Autenticação com Google:** Usuários podem fazer login com o Google pela Navbar ou página inicial. Após o login, o nome do usuário aparece na Navbar com a opção de logout.
+
+7. **Redirecionamento Automático:** Usuários autenticados são redirecionados automaticamente para a página de contatos. Tentativas de acessar rotas protegidas sem estar logado resultam em redirecionamento para a página de login.
+
+8. **Toasts de Feedback:** Notificações aparecem para confirmar ações importantes como adicionar, editar ou excluir contatos.
+
+9. **Validação de Inputs:** O e-mail é validado e o telefone é formatado automaticamente ao adicionar ou editar contatos, garantindo consistência dos dados.
+
+10. **Proteção de Rotas:** Apenas usuários logados podem acessar as páginas de lista e adição de contatos. Rotas protegidas redirecionam usuários não autenticados para a página de login.
+
+### 🔐 Gerenciamento de Sessão:
+
+- **Autenticação com Google:** Usuários podem fazer login com o Google; nome do usuário aparece na Navbar com opção de logout.
+- **Redirecionamento Automático:** Usuários logados são redirecionados para a página de contatos; rotas protegidas redirecionam usuários não autenticados para login.
+
+### 💡 Melhorias no UX:
+
+- **Toasts de Feedback:** Exibidos após ações como adicionar, editar ou excluir contatos.
+- **Validação de Inputs:** E-mails são validados e telefones são formatados automaticamente.
+
+### 🔐 Proteção de Rotas:
+
+- **Rotas Protegidas:** Apenas usuários logados podem acessar a lista de contatos e adicionar novos. O sistema redireciona usuários não autenticados para a página de login.
 
 ## 🚀 Tecnologias Utilizadas
 
