@@ -1,13 +1,44 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { auth, provider, signInWithPopup, signOut } from "@/utils/firebase"; // Import correto
+import { onAuthStateChanged } from "firebase/auth";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user); // Armazena o usuário logado
+      } else {
+        setUser(null); // Usuário deslogado
+      }
+    });
+
+    return () => unsubscribe(); // Desinscrever a escuta quando o componente desmontar
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, provider); // Fazer login com Google
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Fazer logout
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
   };
 
   return (
@@ -36,6 +67,26 @@ const Navbar = () => {
             <Link href="/add-contact" className="block text-white hover:text-gray-300">
               Adicionar Contato
             </Link>
+
+            {/* Se o usuário estiver logado, mostrar o botão "Sair" */}
+            {user ? (
+              <>
+                <span className="text-white">Olá, {user.displayName}</span>
+                <button
+                  onClick={handleLogout}
+                  className="block text-white hover:text-gray-300"
+                >
+                  Sair
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="block text-white hover:text-gray-300"
+              >
+                Entrar com Google
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -44,4 +95,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
